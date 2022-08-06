@@ -414,6 +414,7 @@ rainloop:
 haproxy:
   # haproxy.enabled will deploy an haproxy sub-chart, configured for the TCP ports used by docker-mailserver
   enabled: false
+
   controller:
     replicaCount: 1
     kind: "Deployment"
@@ -431,6 +432,10 @@ haproxy:
     # Set to avoid CI error when running the generated manifest through kubeval (FIXME)
     podAnnotations:
       set-to-avoid-lint-errors-in: "docker-mailserver"
+    resources:
+      limits:
+        cpu: 100m
+        memory: 64Mi
 
   defaultBackend:
     replicaCount: 1
