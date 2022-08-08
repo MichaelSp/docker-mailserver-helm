@@ -5,13 +5,13 @@ image:
   ## image.tag is the tag of the container image to use. Refer to https://hub.docker.com/r/mailserver/docker-mailserver
   ## If image.tag is not defined it will default to `.Chart.appVersion`
   # tag: "latest"
-  pullPolicy: "IfNotPresent"
+  pullPolicy: "Always"
 
 initContainer:
   image:
     name: "busybox"
     tag: "stable"
-    pullPolicy: "IfNotPresent"
+    pullPolicy: "Always"
 
   # These resources refer specifically to the _init container_, which needs only _puny_ resources,
   # since all it does is copy the config into place
@@ -19,9 +19,11 @@ initContainer:
     requests:
       cpu: "10m"
       memory: "32Mi"
+      ephemeral-storage: 1Gi
     limits:
       cpu: "50m"
       memory: "64Mi"
+      ephemeral-storage: 2Gi
 
   containerSecurityContext:
     readOnlyRootFilesystem: true
@@ -323,12 +325,14 @@ resources:
     ## Reduce these at requests your peril - too few resources can cause daemons (i.e., clamd) to fail, or timeouts to occur.
     ## A test installation with clamd running was killed when it consumed 1437Mi (which is why this value was increased to 1536)
     memory: "1536Mi"
+    ephemeral-storage: "2Gi"
   limits:
     ## The max CPU this container should be allowed to use
     cpu: "2"
     ## The max memory this container should be allowed to use. Note: If a container exceeds its memory limit,
     ## it may terminated.
     memory: "2048Mi"
+    ephemeral-storage: "2Gi"
 
 persistence:
   size: "10Gi"
@@ -411,6 +415,7 @@ rainloop:
     tls: [ ]
 
 ## These values are for the haproxy sub-chart
+## see https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
 haproxy:
   # haproxy.enabled will deploy an haproxy sub-chart, configured for the TCP ports used by docker-mailserver
   enabled: true

@@ -14,3 +14,32 @@ secret:
 
 demoMode:
   enabled: true
+
+haproxy:
+  # haproxy.enabled will deploy an haproxy sub-chart, configured for the TCP ports used by docker-mailserver
+  enabled: true
+
+  controller:
+    image:
+      pullPolicy: Always
+    resources:
+      limits:
+        cpu: 100m
+        memory: 64Mi
+        ephemeral-storage: 100Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+        ephemeral-storage: 100Mi
+  defaultBackend:
+    image:
+      pullPolicy: Always
+    resources:
+      limits:
+        cpu: 100m
+        memory: 64Mi
+        ephemeral-storage: 100Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+        ephemeral-storage: 100Mi
