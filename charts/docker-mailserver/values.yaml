@@ -462,7 +462,3 @@ metrics:
   serviceMonitor:
     enabled: false
     scrapeInterval: 15s
-
-
-
-
