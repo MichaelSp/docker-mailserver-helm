@@ -165,6 +165,38 @@ entries:
       artifacthub.io/changes: |
         - Breaking : Standardized app labels to app.kubernetes.io/name for Istio workload/Cilium compatibility
     apiVersion: v2
+    appVersion: 13.1.0
+    created: "2024-01-01T12:31:12.978131373Z"
+    dependencies:
+    - alias: haproxy
+      condition: haproxy.enabled
+      name: kubernetes-ingress
+      repository: https://haproxytech.github.io/helm-charts
+      version: 1.35.3
+    description: A fullstack but simple mailserver (smtp, imap, antispam, antivirus,
+      ssl...) using Docker.
+    digest: 8a87ec76f79d6d54efd3b83d08e3301a8e6acea7e767db571c51631c928f61b8
+    home: https://github.com/docker-mailserver/docker-mailserver-helm
+    icon: https://avatars.githubusercontent.com/u/76868633?s=400&v=4
+    keywords:
+    - mailserver
+    - postfix
+    - dovecot
+    - amavis
+    - imap
+    maintainers:
+    - email: davidy@funkypenguin.co.nz
+      name: funkypenguin
+    name: docker-mailserver
+    sources:
+    - https://github.com/docker-mailserver/docker-mailserver-helm
+    urls:
+    - https://github.com/MichaelSp/docker-mailserver-helm/releases/download/docker-mailserver-2.1.1-patch4/docker-mailserver-2.1.1-patch4.tgz
+    version: 2.1.1-patch4
+  - annotations:
+      artifacthub.io/changes: |
+        - Breaking : Standardized app labels to app.kubernetes.io/name for Istio workload/Cilium compatibility
+    apiVersion: v2
     appVersion: 13.0.1
     created: "2023-12-09T08:52:13.885814654Z"
     dependencies:
@@ -481,4 +513,4 @@ entries:
     urls:
     - https://github.com/MichaelSp/docker-mailserver-helm/releases/download/docker-mailserver-1.0.2/docker-mailserver-1.0.2.tgz
     version: 1.0.2
-generated: "2023-12-09T08:52:13.885928056Z"
+generated: "2024-01-01T12:31:12.978263059Z"
