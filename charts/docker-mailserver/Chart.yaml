@@ -23,7 +23,7 @@ annotations:
     
 dependencies:
   - name: "kubernetes-ingress"
-    version: "1.35.5"
+    version: "1.36.1"
     repository: "https://haproxytech.github.io/helm-charts"
     condition: haproxy.enabled
     alias: "haproxy"
