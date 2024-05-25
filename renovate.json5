@@ -1,38 +1,14 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
-  extends: ["config:base"],
-  postUpdateOptions: ["helmUpdateSubChartArchives"],
-  regexManagers: [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>MichaelSp/MichaelSp//.github/renovate.json5"],
+  "regexManagers": [
     {
-      description: "Update docker-mailserver docker image references in appVersion",
-      fileMatch: ["Chart\\.yaml$"],
-      matchStrings: [
-        "appVersion:\\s+['\"]?(?<currentValue>\\d+\\.\\d+\\.\\d+)['\"]?",
-      ],
-      depNameTemplate: "mailserver/docker-mailserver",
-      datasourceTemplate: "docker",
-      versioningTemplate: "docker",
-    },
-  ],
-  packageRules: [
-    {
-      matchManagers: ["helm-requirements", "helm-values"],
-      postUpgradeTasks: {
-        commands: [
-          "version=$(grep '^version:' {{{parentDir}}}/Chart.yaml | awk '{print $2}') \
-          major=$(echo $version | cut -d. -f1) \
-          minor=$(echo $version | cut -d. -f2) \
-          patch=$(echo $version | cut -d. -f3) \
-          p=$(echo $version | cut -d- -f2) \
-          p=${p#patch} \
-          p=$(expr $p + 1) \
-          echo \"Replacing $version with $major.$minor.$patch-patch${p}\"  \
-          sed -i \"s/^version:.*/version: ${major}.${minor}.${patch}-patch${p}/g\" {{{parentDir}}}/Chart.yaml  \
-          cat {{{parentDir}}}/Chart.yaml",
-        ],
-        fileFilters: ["**/Chart.yaml"],
-        executionMode: "branch",
-      },
-    },
-  ],
+      "description": "Update docker-mailserver docker image references in appVersion",
+      "fileMatch": ["Chart\\.yaml$"],
+      "matchStrings": ["appVersion:\\s+['\"]?(?<currentValue>\\d+\\.\\d+\\.\\d+)['\"]?"],
+      "depNameTemplate": "mailserver/docker-mailserver",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ]
 }
