@@ -31,6 +31,32 @@ entries:
       artifacthub.io/changes: |
         - Breaking : Standardized app labels to app.kubernetes.io/name for Istio workload/Cilium compatibility
     apiVersion: v2
+    appVersion: 15.0.2
+    created: "2025-04-13T17:42:56.446341446Z"
+    description: A fullstack but simple mailserver (smtp, imap, antispam, antivirus,
+      ssl...) using Docker.
+    digest: d6ee62ad0e9fd40b516b1298151764301d3ef376f5e0fe309fa56cccde91309e
+    home: https://github.com/funkypenguin/helm-docker-mailserver
+    icon: https://avatars.githubusercontent.com/u/76868633?s=400&v=4
+    keywords:
+    - mailserver
+    - postfix
+    - dovecot
+    - amavis
+    - imap
+    maintainers:
+    - email: davidy@funkypenguin.co.nz
+      name: funkypenguin
+    name: docker-mailserver
+    sources:
+    - https://github.com/docker-mailserver/docker-mailserver-helm
+    urls:
+    - https://github.com/MichaelSp/docker-mailserver-helm/releases/download/docker-mailserver-5.0.0-build415/docker-mailserver-5.0.0-build415.tgz
+    version: 5.0.0-build415
+  - annotations:
+      artifacthub.io/changes: |
+        - Breaking : Standardized app labels to app.kubernetes.io/name for Istio workload/Cilium compatibility
+    apiVersion: v2
     appVersion: 15.0.0
     created: "2025-03-09T07:32:15.283202984Z"
     description: A fullstack but simple mailserver (smtp, imap, antispam, antivirus,
@@ -669,4 +695,4 @@ entries:
     urls:
     - https://github.com/MichaelSp/docker-mailserver-helm/releases/download/docker-mailserver-1.0.2/docker-mailserver-1.0.2.tgz
     version: 1.0.2
-generated: "2025-03-09T07:32:15.283427583Z"
+generated: "2025-04-13T17:42:56.446521695Z"
