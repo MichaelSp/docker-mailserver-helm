@@ -213,7 +213,7 @@ spec:
               containerPort: 10465
             - name: sub-proxy
               containerPort: 10587
-          {{- end }}   
+          {{- end }}
 
         {{- if and (.Values.deployment.env.ENABLE_IMAP) (not .Values.deployment.env.SMTP_ONLY) }}
             - name: imap
@@ -225,8 +225,8 @@ spec:
               containerPort: 10143
             - name: imaps-proxy
               containerPort: 10993
-          {{- end }}   
-        {{- end }}   
+          {{- end }}
+        {{- end }}
 
         {{- if and (.Values.deployment.env.ENABLE_POP3) (not .Values.deployment.env.SMTP_ONLY) }}
             - name: pop3
@@ -238,22 +238,22 @@ spec:
               containerPort: 10110
             - name: pop3s-proxy
               containerPort: 10995
-          {{- end }}   
-        {{- end }}  
+          {{- end }}
+        {{- end }}
 
         {{- if .Values.deployment.env.ENABLE_RSPAMD }}
             - name: rspamd
-              containerPort: 11334  
-        {{- end }}  
+              containerPort: 11334
+        {{- end }}
 
         {{- if and (.Values.deployment.env.ENABLE_MANAGESIEVE) (not .Values.deployment.env.SMTP_ONLY) }}
             - name: managesieve
-              containerPort: 4190  
+              containerPort: 4190
           {{- if .Values.proxyProtocol.enabled }}
             - name: managesieve-proxy
               containerPort: 14190
-          {{- end }}   
-        {{- end }}  
+          {{- end }}
+        {{- end }}
 
 {{- if .Values.metrics.enabled }}
         - name: metrics-exporter
@@ -271,7 +271,7 @@ spec:
               name: http
               protocol: TCP
           resources:
-{{ toYaml .Values.metrics.resources | indent 12 }}          
+{{ toYaml .Values.metrics.resources | indent 12 }}
           securityContext:
 {{ toYaml .Values.deployment.containerSecurityContext | indent 12 }}
 
