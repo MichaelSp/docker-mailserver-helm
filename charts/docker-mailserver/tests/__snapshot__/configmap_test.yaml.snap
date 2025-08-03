@@ -1,0 +1,75 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: v1
+    data:
+      dovecot.cf: |2
+        haproxy_trusted_networks = 10.0.0.0/8 192.168.0.0/16 172.16.0.0/12
+        service imap-login {
+            inet_listener imap {
+                port = 143
+            }
+
+            inet_listener imaps {
+                port = 993
+                ssl = yes
+            }
+
+            inet_listener imap_proxyprotocol {
+                haproxy = yes
+                port = 10143
+                ssl = no
+            }
+
+            inet_listener imaps_proxyprotocol {
+                haproxy = yes
+                port = 10993
+                ssl = yes
+            }
+        }
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/name: RELEASE-NAME-docker-mailserver
+        chart: docker-mailserver-0.1.0
+        heritage: Helm
+        release: RELEASE-NAME
+      name: dovecot-cf
+  2: |
+    apiVersion: v1
+    data:
+      fts-xapian-plugin.conf: ""
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/name: RELEASE-NAME-docker-mailserver
+        chart: docker-mailserver-0.1.0
+        heritage: Helm
+        release: RELEASE-NAME
+      name: fts-xapian-plugin-conf
+  3: |
+    apiVersion: v1
+    data:
+      user-patches.sh: |
+        #!/bin/bash
+        # NOTE: Keep in sync with upstream advice:
+        # https://github.com/docker-mailserver/docker-mailserver/blob/v15.0.0/docs/content/examples/tutorials/mailserver-behind-proxy.md?plain=1#L238-L268
+
+        # Duplicate the config for the submission(s) service ports (587 / 465) with adjustments for the PROXY ports (10587 / 10465) and `syslog_name` setting:
+        postconf -Mf submission/inet | sed -e s/^submission/10587/ -e 's/submission/submission-proxyprotocol/' >> /etc/postfix/master.cf
+        postconf -Mf submissions/inet | sed -e s/^submissions/10465/ -e 's/submissions/submissions-proxyprotocol/' >> /etc/postfix/master.cf
+        # Enable PROXY Protocol support for these new service variants:
+        postconf -P 10587/inet/smtpd_upstream_proxy_protocol=haproxy
+        postconf -P 10465/inet/smtpd_upstream_proxy_protocol=haproxy
+
+        # Create a variant for port 25 too (NOTE: Port 10025 is already assigned in DMS to Amavis):
+        postconf -Mf smtp/inet | sed -e s/^smtp/12525/ >> /etc/postfix/master.cf
+        # Enable PROXY Protocol support (different setting as port 25 is handled via postscreen), optionally configure a `syslog_name` to distinguish in logs:
+        postconf -P 12525/inet/postscreen_upstream_proxy_protocol=haproxy 12525/inet/postscreen_cache_map=proxy:btree:\$data_directory/postscreen_12525_cache 12525/inet/syslog_name=postfix/smtpd-proxyprotocol
+    kind: ConfigMap
+    metadata:
+      labels:
+        app.kubernetes.io/name: RELEASE-NAME-docker-mailserver
+        chart: docker-mailserver-0.1.0
+        heritage: Helm
+        release: RELEASE-NAME
+      name: user-patches-sh
