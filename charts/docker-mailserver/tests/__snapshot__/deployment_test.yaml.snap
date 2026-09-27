@@ -25,15 +25,33 @@ manifest should match snapshot:
         spec:
           containers:
             - env:
+                - name: ACCOUNT_PROVISIONER
+                  value: null
                 - name: AMAVIS_LOGLEVEL
                   value: "0"
+                - name: CLAMAV_MESSAGE_SIZE_LIMIT
+                  value: null
+                - name: DEFAULT_RELAY_HOST
+                  value: null
+                - name: DMS_VMAIL_GID
+                  value: null
+                - name: DMS_VMAIL_UID
+                  value: null
+                - name: DOVECOT_AUTH_BIND
+                  value: null
                 - name: DOVECOT_INET_PROTOCOLS
                   value: all
                 - name: DOVECOT_MAILBOX_FORMAT
                   value: maildir
                 - name: DOVECOT_PASS_ATTRS
                   value: null
+                - name: DOVECOT_PASS_FILTER
+                  value: null
+                - name: DOVECOT_TLS
+                  value: null
                 - name: DOVECOT_USER_ATTRS
+                  value: null
+                - name: DOVECOT_USER_FILTER
                   value: null
                 - name: ENABLE_AMAVIS
                   value: "0"
@@ -49,12 +67,16 @@ manifest should match snapshot:
                   value: "0"
                 - name: ENABLE_IMAP
                   value: "1"
+                - name: ENABLE_MANAGESIEVE
+                  value: null
                 - name: ENABLE_OPENDKIM
                   value: "0"
                 - name: ENABLE_OPENDMARC
                   value: "0"
                 - name: ENABLE_POLICYD_SPF
                   value: "0"
+                - name: ENABLE_POP3
+                  value: null
                 - name: ENABLE_POSTGREY
                   value: "0"
                 - name: ENABLE_QUOTAS
@@ -81,20 +103,48 @@ manifest should match snapshot:
                   value: "300"
                 - name: GETMAIL_POLL
                   value: "5"
+                - name: LDAP_QUERY_FILTER_ALIAS
+                  value: null
+                - name: LDAP_QUERY_FILTER_DOMAIN
+                  value: null
+                - name: LDAP_QUERY_FILTER_GROUP
+                  value: null
+                - name: LDAP_QUERY_FILTER_USER
+                  value: null
+                - name: LDAP_SEARCH_BASE
+                  value: null
+                - name: LDAP_SERVER_HOST
+                  value: null
+                - name: LDAP_START_TLS
+                  value: null
                 - name: LOGROTATE_COUNT
                   value: "4"
                 - name: LOGROTATE_INTERVAL
                   value: weekly
+                - name: LOGWATCH_INTERVAL
+                  value: null
+                - name: LOGWATCH_RECIPIENT
+                  value: null
+                - name: LOGWATCH_SENDER
+                  value: null
                 - name: LOG_LEVEL
                   value: info
                 - name: MARK_SPAM_AS_READ
                   value: "0"
                 - name: MOVE_SPAM_TO_JUNK
                   value: "1"
+                - name: NETWORK_INTERFACE
+                  value: null
                 - name: OVERRIDE_HOSTNAME
                   value: mail.example.com
                 - name: PERMIT_DOCKER
                   value: none
+                - name: PFLOGSUMM_RECIPIENT
+                  value: null
+                - name: PFLOGSUMM_SENDER
+                  value: null
+                - name: PFLOGSUMM_TRIGGER
+                  value: null
                 - name: POSTFIX_DAGENT
                   value: null
                 - name: POSTFIX_INET_PROTOCOLS
@@ -105,8 +155,6 @@ manifest should match snapshot:
                   value: null
                 - name: POSTFIX_REJECT_UNKNOWN_CLIENT_HOSTNAME
                   value: "0"
-                - name: POSTMASTER_ADDRESS
-                  value: null
                 - name: POSTGREY_AUTO_WHITELIST_CLIENTS
                   value: "5"
                 - name: POSTGREY_DELAY
@@ -115,6 +163,8 @@ manifest should match snapshot:
                   value: "35"
                 - name: POSTGREY_TEXT
                   value: Delayed by Postgrey
+                - name: POSTMASTER_ADDRESS
+                  value: null
                 - name: POSTSCREEN_ACTION
                   value: enforce
                 - name: RELAY_HOST
@@ -139,12 +189,6 @@ manifest should match snapshot:
                   value: "0"
                 - name: RSPAMD_NEURAL
                   value: "0"
-                - name: SA_KILL
-                  value: "10"
-                - name: SA_TAG
-                  value: "2"
-                - name: SA_TAG2
-                  value: "6.31"
                 - name: SASLAUTHD_LDAP_AUTH_METHOD
                   value: null
                 - name: SASLAUTHD_LDAP_FILTER
@@ -169,6 +213,12 @@ manifest should match snapshot:
                   value: null
                 - name: SASLAUTHD_MECH_OPTIONS
                   value: null
+                - name: SA_KILL
+                  value: "10"
+                - name: SA_TAG
+                  value: "2"
+                - name: SA_TAG2
+                  value: "6.31"
                 - name: SMTP_ONLY
                   value: null
                 - name: SPAMASSASSIN_SPAM_TO_INBOX
