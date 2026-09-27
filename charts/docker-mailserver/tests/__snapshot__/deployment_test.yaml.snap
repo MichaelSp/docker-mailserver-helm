@@ -95,10 +95,18 @@ manifest should match snapshot:
                   value: mail.example.com
                 - name: PERMIT_DOCKER
                   value: none
+                - name: POSTFIX_DAGENT
+                  value: null
                 - name: POSTFIX_INET_PROTOCOLS
                   value: all
+                - name: POSTFIX_MAILBOX_SIZE_LIMIT
+                  value: null
+                - name: POSTFIX_MESSAGE_SIZE_LIMIT
+                  value: null
                 - name: POSTFIX_REJECT_UNKNOWN_CLIENT_HOSTNAME
                   value: "0"
+                - name: POSTMASTER_ADDRESS
+                  value: null
                 - name: POSTGREY_AUTO_WHITELIST_CLIENTS
                   value: "5"
                 - name: POSTGREY_DELAY
@@ -109,8 +117,16 @@ manifest should match snapshot:
                   value: Delayed by Postgrey
                 - name: POSTSCREEN_ACTION
                   value: enforce
+                - name: RELAY_HOST
+                  value: null
                 - name: RELAY_PORT
                   value: "25"
+                - name: RELAY_USER
+                  value: null
+                - name: REPORT_RECIPIENT
+                  value: null
+                - name: REPORT_SENDER
+                  value: null
                 - name: RSPAMD_CHECK_AUTHENTICATED
                   value: "0"
                 - name: RSPAMD_GREYLISTING
@@ -129,12 +145,54 @@ manifest should match snapshot:
                   value: "2"
                 - name: SA_TAG2
                   value: "6.31"
+                - name: SASLAUTHD_LDAP_AUTH_METHOD
+                  value: null
+                - name: SASLAUTHD_LDAP_FILTER
+                  value: null
+                - name: SASLAUTHD_LDAP_MECH
+                  value: null
+                - name: SASLAUTHD_LDAP_PASSWORD_ATTR
+                  value: null
+                - name: SASLAUTHD_LDAP_SEARCH_BASE
+                  value: null
+                - name: SASLAUTHD_LDAP_SERVER
+                  value: null
+                - name: SASLAUTHD_LDAP_START_TLS
+                  value: null
+                - name: SASLAUTHD_LDAP_TLS_CACERT_DIR
+                  value: null
+                - name: SASLAUTHD_LDAP_TLS_CACERT_FILE
+                  value: null
+                - name: SASLAUTHD_LDAP_TLS_CHECK_PEER
+                  value: null
+                - name: SASLAUTHD_MECHANISMS
+                  value: null
+                - name: SASLAUTHD_MECH_OPTIONS
+                  value: null
+                - name: SMTP_ONLY
+                  value: null
                 - name: SPAMASSASSIN_SPAM_TO_INBOX
                   value: "1"
                 - name: SPAM_SUBJECT
                   value: '***SPAM*** '
+                - name: SPOOF_PROTECTION
+                  value: null
+                - name: SRS_EXCLUDE_DOMAINS
+                  value: null
+                - name: SRS_SECRET
+                  value: null
                 - name: SRS_SENDER_CLASSES
                   value: envelope_sender
+                - name: SSL_ALT_CERT_PATH
+                  value: null
+                - name: SSL_ALT_KEY_PATH
+                  value: null
+                - name: SUPERVISOR_LOGLEVEL
+                  value: null
+                - name: TLS_LEVEL
+                  value: null
+                - name: TZ
+                  value: null
                 - name: UPDATE_CHECK_INTERVAL
                   value: 1d
                 - name: VIRUSMAILS_DELETE_DELAY
