@@ -86,7 +86,8 @@ deployment:
     ENABLE_IMAP: 1
     ENABLE_CLAMAV: 0
     ENABLE_RSPAMD: 1
-    ENABLE_RSPAMD_REDIS: 1
+    # DMS v16+: Redis replaced by Valkey. Use ENABLE_RSPAMD_VALKEY instead of ENABLE_RSPAMD_REDIS
+    ENABLE_RSPAMD_VALKEY: 1
     RSPAMD_LEARN: 0
     RSPAMD_CHECK_AUTHENTICATED: 0
     RSPAMD_GREYLISTING: 0
@@ -138,6 +139,7 @@ deployment:
     SA_TAG: 2.0
     SA_TAG2: 6.31
     SA_KILL: 10.0
+    # Use SPAM_SUBJECT instead of deprecated SA_SPAM_SUBJECT (removed in DMS v14)
     SPAM_SUBJECT: '***SPAM*** '
 
     # -----------------------------------------------
@@ -165,12 +167,16 @@ deployment:
 
     # -----------------------------------------------
     # --- Dovecot Section ---------------------------
+    # DMS v16+: Dovecot upgraded to 2.4 (Debian 13)
     # -----------------------------------------------
     DOVECOT_TLS:
     DOVECOT_USER_FILTER:
     DOVECOT_PASS_FILTER:
     DOVECOT_MAILBOX_FORMAT: maildir
     DOVECOT_AUTH_BIND:
+    # DMS v16+: New LDAP fields for Dovecot 2.4 compatibility
+    DOVECOT_PASS_ATTRS:
+    DOVECOT_USER_ATTRS:
 
     # -----------------------------------------------
     # --- Postgrey Section --------------------------
@@ -321,6 +327,13 @@ service:
   ##       to allocate a free IP from the pool.
   ## Default: Automatically assign a random IP
   # clusterIp:
+  ## IP family policy for the service. Options: SingleStack, PreferDualStack, RequireDualStack
+  ## Default: SingleStack
+  #ipFamilyPolicy:
+  ## List of IP families to use. Options: IPv4, IPv6
+  ## Order determines preference when ipFamilyPolicy is PreferDualStack or RequireDualStack
+  ## Default: Determined by cluster configuration
+  #ipFamilies:
   annotations: {}
   labels: {}
 
@@ -349,7 +362,8 @@ persistent_volume_claims:
     storageClass:
     selector: {}
 
-  # Stores state for Postfix, Dovecot, Fail2Ban, Amavis, PostGrey, ClamAV, SpamAssassin, Rspamd & Redis
+  # Stores state for Postfix, Dovecot, Fail2Ban, Amavis, PostGrey, ClamAV, SpamAssassin, Rspamd & Valkey
+  # DMS v16+: Redis replaced by Valkey
   # https://docker-mailserver.github.io/docker-mailserver/edge/faq/#what-about-the-docker-datadmsmail-state-directory
   mail-state:
     enabled: true
@@ -386,7 +400,8 @@ persistence:
     mountPath: /var/mail
     subPath:
 
-  # Stores state for Postfix, Dovecot, Fail2Ban, Amavis, PostGrey, ClamAV, SpamAssassin, Rspamd & Redis
+  # Stores state for Postfix, Dovecot, Fail2Ban, Amavis, PostGrey, ClamAV, SpamAssassin, Rspamd & Valkey
+  # DMS v16+: Redis replaced by Valkey
   # https://docker-mailserver.github.io/docker-mailserver/edge/faq/#what-about-the-docker-datadmsmail-state-directory
   mail-state:
     volumeName: mail-state
@@ -444,6 +459,8 @@ rspamd:
 dovecot:
   fullTextSearch:
     enabled: false
+    # DMS v16+: Xapian FTS plugin removed. Use Flatcurve instead.
+    # For Xapian, use an older version of DMS or implement custom configuration via user-patches.sh
     verbose: 0 # 0 (silent), 1 (verbose) or 2 (debug)
     resources:
       memory: 2GB
@@ -576,6 +593,8 @@ configMaps:
     path: /etc/dovecot/conf.d/10-plugin.conf
     data: |
       {{- if .Values.dovecot.fullTextSearch.enabled }}
+        # DMS v16+: Xapian FTS plugin has been removed. Consider using Flatcurve instead.
+        # See: https://docker-mailserver.github.io/docker-mailserver/v16.0/config/full-text-search/
         mail_plugins = $mail_plugins fts fts_xapian
 
         plugin {
@@ -603,7 +622,7 @@ configMaps:
 
       {{- if .Values.proxyProtocol.enabled }}
       # NOTE: Keep in sync with upstream advice:
-      # https://github.com/docker-mailserver/docker-mailserver/blob/v15.0.0/docs/content/examples/tutorials/mailserver-behind-proxy.md?plain=1#L238-L268
+      # https://github.com/docker-mailserver/docker-mailserver/blob/v16.0.0/docs/content/examples/tutorials/mailserver-behind-proxy.md?plain=1#L238-L268
 
       # Duplicate the config for the submission(s) service ports (587 / 465) with adjustments for the PROXY ports (10587 / 10465) and `syslog_name` setting:
       postconf -Mf submission/inet | sed -e s/^submission/10587/ -e 's/submission/submission-proxyprotocol/' >> /etc/postfix/master.cf
@@ -628,22 +647,30 @@ configMaps:
 ## The secrets key works the same way as the configs key. Use secrets to store sensitive information,
 ## such as DKIM signing keys.
 ##
+## DMS v16+ DKIM Format Changes:
+## - Old format: <keytype>-<keysize>-<selector>-<domain>.private.txt
+## - New format: <domain>-<selector>.private
+## Example migration:
+##   OLD: rspamd.dkim.rsa-2048-mail-example.com.private.txt
+##   NEW: example.com-mail.private
+##
+## For Rspamd with v16+:
 ##  secrets:
-##    rspamd.example.com:
-##      name: rspamd.example.com                      # This is the name of the Secret
-##      create: true                                  # If true, create a new Secret
-##      path: rspamd.dkim.rsa-2048-mail-example.com.private.txt
-##      data: abace                           # If create is true, then you must specify content. Must be base 64 encoded!
-##
-##    rspamd.dkim.rsa-2048-mail-example.com.public:
-##      name: rspamd.dkim.rsa-2048-mail-example.com.public
+##    example-com-mail:
+##      name: example-com-mail
 ##      create: true
-##      path: rspamd/dkim/rsa-2048-mail-example.com.public
-##      data: abace                           # If create is true, then you must specify content. Must be base 64 encoded!
+##      path: rspamd/dkim/example.com-mail.private
+##      data: <base64-encoded-key-content>
 ##
-##  If you set the create key to false, then you must manually create the ConfigMaps before deploying the chart.
+##    example-com-mail-public:
+##      name: example-com-mail-public
+##      create: true
+##      path: rspamd/dkim/example.com-mail.public
+##      data: <base64-encoded-public-key-content>
 ##
-##    kubectl create secret rspamd.example.com --namespace mail --from-file=rspamd.dkim.rsa-2048-mail-example.com.private.txt=<path_to_rspamd.dkim.rsa-2048-mail-example.com.private.txt>
+##  If you set the create key to false, then you must manually create the Secrets before deploying the chart.
+##
+##    kubectl create secret generic example-com-mail --namespace mail --from-file=example.com-mail.private=<path_to_key>
 secrets: {}
 
 ## @param extraDeploy Array of extra objects to deploy with the release
