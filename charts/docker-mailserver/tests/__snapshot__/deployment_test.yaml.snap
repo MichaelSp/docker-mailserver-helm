@@ -31,6 +31,10 @@ manifest should match snapshot:
                   value: all
                 - name: DOVECOT_MAILBOX_FORMAT
                   value: maildir
+                - name: DOVECOT_PASS_ATTRS
+                  value: null
+                - name: DOVECOT_USER_ATTRS
+                  value: null
                 - name: ENABLE_AMAVIS
                   value: "0"
                 - name: ENABLE_CLAMAV
@@ -57,7 +61,7 @@ manifest should match snapshot:
                   value: "1"
                 - name: ENABLE_RSPAMD
                   value: "1"
-                - name: ENABLE_RSPAMD_REDIS
+                - name: ENABLE_RSPAMD_VALKEY
                   value: "1"
                 - name: ENABLE_SASLAUTHD
                   value: "0"
@@ -133,6 +137,8 @@ manifest should match snapshot:
                   value: envelope_sender
                 - name: UPDATE_CHECK_INTERVAL
                   value: 1d
+                - name: VIRUSMAILS_DELETE_DELAY
+                  value: null
               image: mailserver/docker-mailserver:0.1.0
               imagePullPolicy: IfNotPresent
               livenessProbe:
